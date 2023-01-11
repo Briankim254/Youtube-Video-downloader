@@ -30,4 +30,31 @@ def download():
 
 # Create a function to select the path
 def selectPath():
+    # Open the file dialog
+    path = filedialog.askdirectory()
+    # Set the path to the entry
+    pathEntry.insert(0, path)
+
+# Create a label
+linkLabel = tk.Label(window, text="Enter the link of the video", font=("Arial", 15))
+
+# Create an entry
+linkEntry = tk.Entry(window, width=50, font=("Arial", 15))
+
+# Create a label
+pathLabel = tk.Label(window, text="Select the path to save the video", font=("Arial", 15))
+
+# Create an entry
+pathEntry = tk.Entry(window, width=50, font=("Arial", 15))
+
+# Create a button
+selectPathButton = tk.Button(window, text="Select Path", font=("Arial", 15), command=selectPath)
+
+# Create a button
+downloadButton = tk.Button(window, text="Download", font=("Arial", 15), command=download)
+
+# Place the widgets
+linkLabel.grid(row=0, column=0, pady=10)
+linkEntry.grid(row=1, column=0, pady=10)
+
     
