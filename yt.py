@@ -1,60 +1,43 @@
-import pytube as pt
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import messagebox
+from pytube import YouTube
 
-# Create a window
-window = tk.Tk()
-window.title("Youtube Video Downloader")
-window.geometry("500x300")
-window.resizable(False, False)
+class VideoDownloader:
+    def __init__(self, master):
+        self.master = master
+        master.title("Video Downloader")
 
-# Create a function to download the video
-def download():
-    try:
-        # Get the link of the video
-        link = linkEntry.get()
-        # Get the path to save the video
-        savePath = pathEntry.get()
-        # Create a youtube object
-        yt = pt.YouTube(link)
-        # Get the video stream
-        stream = yt.streams.first()
-        # Download the video
-        stream.download(savePath)
-        # Show a message
-        messagebox.showinfo("Success", "Video has been downloaded successfully")
-    except Exception as e:
-        # Show a message
-        messagebox.showerror("Error", e)
+        self.url_label = tk.Label(master, text="Enter video URL:")
+        self.url_label.pack()
 
-# Create a function to select the path
-def selectPath():
-    # Open the file dialog
-    path = filedialog.askdirectory()
-    # Set the path to the entry
-    pathEntry.insert(0, path)
+        self.url_entry = tk.Entry(master, width=50)
+        self.url_entry.pack()
 
-# Create a label
-linkLabel = tk.Label(window, text="Enter the link of the video", font=("Arial", 15))
+        self.save_label = tk.Label(master, text="Select save location:")
+        self.save_label.pack()
 
-# Create an entry
-linkEntry = tk.Entry(window, width=50, font=("Arial", 15))
+        self.save_button = tk.Button(master, text="Browse", command=self.browse_directory)
+        self.save_button.pack()
 
-# Create a label
-pathLabel = tk.Label(window, text="Select the path to save the video", font=("Arial", 15))
+        self.download_button = tk.Button(master, text="Download", command=self.download_video)
+        self.download_button.pack()
 
-# Create an entry
-pathEntry = tk.Entry(window, width=50, font=("Arial", 15))
+    def browse_directory(self):
+        save_dir = filedialog.askdirectory()
+        if save_dir:
+            self.save_label.config(text=f"Save location: {save_dir}")
+            self.save_location = save_dir
 
-# Create a button
-selectPathButton = tk.Button(window, text="Select Path", font=("Arial", 15), command=selectPath)
+    def download_video(self):
+        url = self.url_entry.get()
+        if url:
+            yt = YouTube(url)
+            video = yt.streams.filter(progressive=True, file_extension='mp4').first()
+            video.download(self.save_location)
+            tk.messagebox.showinfo("Success", "Video downloaded successfully!")
+        else:
+            tk.messagebox.showerror("Error", "Please enter a valid video URL")
 
-# Create a button
-downloadButton = tk.Button(window, text="Download", font=("Arial", 15), command=download)
-
-# Place the widgets
-linkLabel.grid(row=0, column=0, pady=10)
-linkEntry.grid(row=1, column=0, pady=10)
-
-    
+root = tk.Tk()
+app = VideoDownloader(root)
+root.mainloop()
