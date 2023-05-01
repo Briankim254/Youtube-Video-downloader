@@ -1,4 +1,4 @@
-# YouTube Downloader
+# YouTube video Downloader
 This repository contains an app for downloading videos from YouTube using Python and the [pytube](https://github.com/pytube/pytube) library.
 
 ## Installation
